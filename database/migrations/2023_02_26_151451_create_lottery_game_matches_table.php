@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained('lottery_games');
             $table->date('start_date');
             $table->time('start_time');
-            $table->foreignId('winner_id')->constrained('users');
+            $table->foreignId('winner_id')->nullable()->constrained('users');
+            $table->timestamps();
         });
     }
 

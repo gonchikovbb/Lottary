@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
@@ -13,11 +14,26 @@ class User extends Model
         'first_name',
         'last_name',
         'email',
-        'is_admin',
+        'password',
         'points'
+    ];
+
+    protected $hidden = [
+         'is_admin',
+         'remember_token',
     ];
 
     protected $casts = [
         'is_admin' => 'boolean'
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
