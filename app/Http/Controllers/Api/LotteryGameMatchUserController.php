@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MatchUserEvent;
+use App\Events\MatchUsersFullEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRecordRequest;
 use App\Models\LotteryGameMatchUser;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,6 @@ class LotteryGameMatchUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -28,11 +25,15 @@ class LotteryGameMatchUserController extends Controller
     public function playerRecord(Request $request)
     {
         $user = auth()->user();
-        $lottery_game_match_id = $request['lottery_game_match_id'];
+        $userId = $user['id'];
+        $lotteryGameMatchId = $request['lottery_game_match_id'];
+
+        MatchUserEvent::dispatch($userId, $lotteryGameMatchId);
+        MatchUsersFullEvent::dispatch($lotteryGameMatchId);
 
         $record = LotteryGameMatchUser::create([
-            'user_id' => $user['id'],
-            'lottery_game_match_id' => $lottery_game_match_id,
+            'user_id' => $userId,
+            'lottery_game_match_id' => $lotteryGameMatchId,
         ]);
 
         $record->save();

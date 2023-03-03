@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\LotteryGameMatchEvent;
+use App\Events\MatchUserEvent;
+use App\Events\MatchUsersFullEvent;
+use App\Events\MatchWinnerEvent;
+use App\Listeners\LotteryGameMatchExecute;
+use App\Listeners\MatchUserExecute;
+use App\Listeners\MatchUsersFullExecute;
+use App\Listeners\MatchWinnerExecute;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +26,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        MatchUserEvent::class => [
+            MatchUserExecute::class,
+        ],
+        MatchUsersFullEvent::class => [
+            MatchUsersFullExecute::class,
+        ],
+        MatchWinnerEvent::class => [
+            MatchWinnerExecute::class,
+        ]
     ];
 
     /**

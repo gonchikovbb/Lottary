@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MatchWinnerEvent;
 use App\Http\Controllers\Controller;
 use App\Models\LotteryGameMatch;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\DataCollector\TimeDataCollector;
 
 class LotteryGameMatchController extends Controller
 {
@@ -32,8 +31,9 @@ class LotteryGameMatchController extends Controller
         $start_date = $request['start_date'];
         $start_time = $request['start_time'];
 
-        if ($start_date < date('Y-m-d'))
+        if ($start_date < date('Y-m-d')) {
             return response()->json(['message' => 'Match start date cannot be before now!'], 200);
+        }
 
         $match = LotteryGameMatch::create([
             'game_id' => $game_id,
@@ -54,13 +54,9 @@ class LotteryGameMatchController extends Controller
 
         $id = $match['0']['id'];
 
-        $match = LotteryGameMatch::query()->find($id);
+        $match = json_decode(LotteryGameMatch::query()->find($id),true);
 
-        $match->update([
-            'winner_id' => $request['winner_id'],
-        ]);
-
-        $match->save();
+        MatchWinnerEvent::dispatch($match);
 
         return response()->json(['message' => 'Congratulations!'],200);
     }
