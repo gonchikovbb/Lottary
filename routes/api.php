@@ -25,14 +25,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+# Гость
 //Создание пользователя
 Route::middleware('guest')->post('/users/register', [UserController::class, 'store']);
-
-//Получение списка всех матчей по id лотерейной игры
-Route::middleware('guest')->get('/lottery_game_matches/{game_id}', [LotteryGameMatchController::class, 'show']);
-
-//Получение списка всех лотерейных игр
-Route::middleware('guest')->get('/lottery_games', [LotteryGameController::class, 'index']);
 
 //Авторизация. Получение jwt-токена авторизации
 Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api', 'prefix' => 'auth'], function ($router) {
@@ -42,6 +37,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api', 
     Route::post('me', 'AuthController@me');
 });
 
+# Авторизованный пользователь, владелец учетной записи
 Route::group([ 'middleware' => 'jwt.auth', 'namespace' => 'User'], function() {
     //Редактирование пользователя
     Route::put('/users/update', [UserController::class, 'update']);
@@ -52,11 +48,9 @@ Route::group([ 'middleware' => 'jwt.auth', 'namespace' => 'User'], function() {
     //Запись игрока на лотерейную игру
     Route::post('/lottery_game_match_users', [LotteryGameMatchUserController::class, 'playerRecord']);
 
-    //Получение списка всех лотерейных игр
-    Route::get('/lottery_games', [LotteryGameController::class, 'index']);
 });
 
-
+# Авторизованный администратор
 Route::group(['middleware' => 'is_admin', 'namespace' => 'Admin'], function () {
 
     //Создание матча лотерейной игры
@@ -69,6 +63,12 @@ Route::group(['middleware' => 'is_admin', 'namespace' => 'Admin'], function () {
     Route::put('/lottery_game_matches', [LotteryGameMatchController::class, 'endOfTheMatch']);
 });
 
+# Гость, авторизованный пользователь, администратор
+//Получение списка всех матчей по id лотерейной игры
+Route::get('/lottery_game_matches/{game_id}', [LotteryGameMatchController::class, 'show']);
+
+//Получение списка всех лотерейных игр
+Route::get('/lottery_games', [LotteryGameController::class, 'index']);
 
 
 

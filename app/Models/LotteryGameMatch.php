@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LotteryGameMatch extends Model
 {
@@ -15,4 +16,14 @@ class LotteryGameMatch extends Model
         'start_time',
         'winner_id',
     ];
+
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(LotteryGame::class,'game_id','id');
+    }
+
+    public function winnerUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'winner_id','id');
+    }
 }

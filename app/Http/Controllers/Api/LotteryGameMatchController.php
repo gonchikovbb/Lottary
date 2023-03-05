@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Events\MatchWinnerEvent;
 use App\Http\Controllers\Controller;
 use App\Models\LotteryGameMatch;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 
 class LotteryGameMatchController extends Controller
@@ -48,13 +49,13 @@ class LotteryGameMatchController extends Controller
 
     public function endOfTheMatch(Request $request)
     {
-        $game_id = $request['game_id'];
-
-        $match = json_decode(LotteryGameMatch::query()->where('game_id', '=', $game_id)->get(),true);
-
-        $id = $match['0']['id'];
-
-        $match = json_decode(LotteryGameMatch::query()->find($id),true);
+        $match = LotteryGameMatch::query()->find($request['id']);
+//        $match = json_decode(LotteryGameMatch::query()->where('id', '=', $id)->get(),true);
+//        $match = json_decode(LotteryGameMatch::query()->where('game_id', '=', $id)->get(),true);
+//
+//        $gameId = $match['0']['id'];
+//
+//        $match = json_decode(LotteryGameMatch::query()->find($id),true);
 
         MatchWinnerEvent::dispatch($match);
 
@@ -76,4 +77,6 @@ class LotteryGameMatchController extends Controller
     {
         //
     }
+
+
 }

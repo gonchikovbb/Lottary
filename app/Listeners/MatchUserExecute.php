@@ -38,7 +38,7 @@ class MatchUserExecute
 
         if (!empty($match)) {
             print_r( 'You are already signed up for the game!');
-            exit;
+            return false;
         }
     }
 }

@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LotteryGame;
+use App\Models\LotteryGameMatch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class LotteryGameController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Collection
      */
     public function index()
     {
-        return LotteryGame::all();
+        return LotteryGame::with('gameMatches')->get();
     }
 
     /**

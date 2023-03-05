@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Models\LotteryGameMatch;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +17,7 @@ class UserController extends Controller
 {
     public function index(): Collection
     {
-        return User::all();
+        return User::with('winnerUser')->get();
     }
 
     public function store(StoreUserRequest $request)
