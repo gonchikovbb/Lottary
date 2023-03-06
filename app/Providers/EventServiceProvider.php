@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\AddingPointsEvent;
 use App\Events\LotteryGameMatchEvent;
 use App\Events\MatchUserEvent;
 use App\Events\MatchUsersFullEvent;
 use App\Events\MatchWinnerEvent;
+use App\Listeners\AddingPointsExecute;
 use App\Listeners\LotteryGameMatchExecute;
 use App\Listeners\MatchUserExecute;
 use App\Listeners\MatchUsersFullExecute;
@@ -28,12 +30,13 @@ class EventServiceProvider extends ServiceProvider
         ],
         MatchUserEvent::class => [
             MatchUserExecute::class,
-        ],
-        MatchUsersFullEvent::class => [
             MatchUsersFullExecute::class,
         ],
         MatchWinnerEvent::class => [
             MatchWinnerExecute::class,
+        ],
+        AddingPointsEvent::class => [
+            AddingPointsExecute::class
         ]
     ];
 

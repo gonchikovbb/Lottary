@@ -38,7 +38,67 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function winnerUser(): HasMany
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->first_name;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->last_name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    public function setFirstName(string $firstName)
+    {
+        $this->first_name = $firstName;
+    }
+
+    public function setLastName(string $lastName)
+    {
+        $this->last_name = $lastName;
+    }
+
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    public function setPassword(string $password)
+    {
+        $this->password = $password;
+    }
+
+    public function setPoints(int $points)
+    {
+        $this->points = $points;
+    }
+
+    public function winnerMatches(): HasMany
     {
         return $this->hasMany(LotteryGameMatch::class,'winner_id', 'id');
     }

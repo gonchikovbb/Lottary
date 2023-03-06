@@ -2,81 +2,42 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\MatchWinnerEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreMatchValidationRequest;
 use App\Models\LotteryGameMatch;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 
 class LotteryGameMatchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(StoreMatchValidationRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create(Request $request)
-    {
-        $game_id = $request['game_id'];
-        $start_date = $request['start_date'];
-        $start_time = $request['start_time'];
-
-        if ($start_date < date('Y-m-d')) {
-            return response()->json(['message' => 'Match start date cannot be before now!'], 200);
-        }
+        $data = $request->validated();
 
         $match = LotteryGameMatch::create([
-            'game_id' => $game_id,
-            'start_date' => $start_date,
-            'start_time' => $start_time,
+            'game_id' => $data['game_id'],
+            'start_date' => $data['start_date'],
+            'start_time' => $data['start_time'],
         ]);
 
         $match->save();
 
-        return response()->json(['message' => 'Match created!'],200);
+        return $match;
     }
 
-    public function endOfTheMatch(Request $request)
+    public function update(Request $request)
     {
         $match = LotteryGameMatch::query()->find($request['id']);
-//        $match = json_decode(LotteryGameMatch::query()->where('id', '=', $id)->get(),true);
-//        $match = json_decode(LotteryGameMatch::query()->where('game_id', '=', $id)->get(),true);
-//
-//        $gameId = $match['0']['id'];
-//
-//        $match = json_decode(LotteryGameMatch::query()->find($id),true);
 
-        MatchWinnerEvent::dispatch($match);
+        if (!$match['is_finished']) {
+            $match['is_finished'] = true;
+            $match->save();
+        }
 
-        return response()->json(['message' => 'Congratulations!'],200);
+        return $match['winner_id'];
     }
 
-    public function show($game_id)
+    public function show($gameId)
     {
-        return LotteryGameMatch::query()->where('game_id', '=', $game_id)->get();
+        return LotteryGameMatch::query()->where('game_id', '=', $gameId)->get();
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
 }

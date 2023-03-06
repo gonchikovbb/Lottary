@@ -11,16 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MatchWinnerEvent
+class AddingPointsEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
     public LotteryGameMatch $match;
 
     public function __construct(LotteryGameMatch $match)
     {
         $this->match = $match;
     }
+
     public function broadcastOn()
     {
         return new PrivateChannel('channel-name');

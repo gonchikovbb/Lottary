@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\LotteryGameMatchUser;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,24 +15,13 @@ class MatchUserEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $userId;
-    public $lotteryGameMatchId;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct($userId, $lotteryGameMatchId)
+    public LotteryGameMatchUser $LotteryGameMatchUser;
+
+    public function __construct(LotteryGameMatchUser $LotteryGameMatchUser)
     {
-        $this->userId = $userId;
-        $this->lotteryGameMatchId = $lotteryGameMatchId;
+        $this->LotteryGameMatchUser = $LotteryGameMatchUser;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
         return new PrivateChannel('channel-name');

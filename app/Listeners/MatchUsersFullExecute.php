@@ -2,38 +2,31 @@
 
 namespace App\Listeners;
 
-use App\Events\MatchUsersFullEvent;
+use App\Events\MatchUserEvent;
+use App\Models\LotteryGame;
+use App\Models\LotteryGameMatch;
 use App\Models\LotteryGameMatchUser;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class MatchUsersFullExecute
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function handle(MatchUserEvent $event)
     {
-        //
-    }
+        $matchId = $event->LotteryGameMatchUser['lottery_game_match_id'];
 
-    /**
-     * Handle the event.
-     *
-     * @param  \App\Events\MatchUsersFullEvent  $event
-     * @return void
-     */
-    public function handle(MatchUsersFullEvent $event)
-    {
-        $maxUsers = 3;
+        $match =  LotteryGameMatch::query()->find($matchId);
 
-        $countMatches= LotteryGameMatchUser::query()->where('lottery_game_match_id', '=', $event->lotteryGameMatchId)->count();
+        $gameId = $match['game_id'];
 
-        if ($countMatches >= $maxUsers) {
-            print_r( 'Full players finished!');
-            exit;
+        $game = LotteryGame::query()->find($gameId);
+
+        $gamerCount = $game['gamer_count'];
+
+        $countMatches= LotteryGameMatchUser::query()
+            ->where('lottery_game_match_id', '=', $matchId)
+            ->count();
+
+        if ($countMatches >= $gamerCount) {
+            return false;
         }
     }
 }

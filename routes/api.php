@@ -31,6 +31,7 @@ Route::middleware('guest')->post('/users/register', [UserController::class, 'sto
 
 //Авторизация. Получение jwt-токена авторизации
 Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api', 'prefix' => 'auth'], function ($router) {
+//    Route::post('login', ['AuthController@login']);
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
@@ -60,7 +61,7 @@ Route::group(['middleware' => 'is_admin', 'namespace' => 'Admin'], function () {
     Route::get('/users', [UserController::class, 'index']);
 
     //Завершение матча лотерейной игры. Обновляется только поле is_finished
-    Route::put('/lottery_game_matches', [LotteryGameMatchController::class, 'endOfTheMatch']);
+    Route::put('/lottery_game_matches', [LotteryGameMatchController::class, 'update']);
 });
 
 # Гость, авторизованный пользователь, администратор
