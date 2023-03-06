@@ -11,11 +11,11 @@ class MatchUsersFullExecute
 {
     public function handle(MatchUserEvent $event)
     {
-        $matchId = $event->LotteryGameMatchUser['lottery_game_match_id'];
+        $matchId = $event->lotteryGameMatchUser->getLotteryGameMatchId();
 
         $match =  LotteryGameMatch::query()->find($matchId);
 
-        $gameId = $match['game_id'];
+        $gameId = $match->getGameId();
 
         $game = LotteryGame::query()->find($gameId);
 

@@ -18,4 +18,14 @@ class LotteryGameMatchUser extends Model
     protected $dispatchesEvents = [
         'saving' => MatchUserEvent::class,
     ];
+
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    public function getLotteryGameMatchId()
+    {
+        return $this->lottery_game_match_id;
+    }
 }

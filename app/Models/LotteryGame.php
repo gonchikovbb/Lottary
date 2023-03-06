@@ -22,4 +22,9 @@ class LotteryGame extends Model
             ->orderBy('start_date')
             ->orderBy('start_time');
     }
+
+    public function getRewardPoints()
+    {
+        return $this->reward_points;
+    }
 }

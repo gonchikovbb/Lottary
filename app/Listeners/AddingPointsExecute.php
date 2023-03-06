@@ -10,11 +10,11 @@ class AddingPointsExecute
 {
     public function handle(AddingPointsEvent $event)
     {
-        $matchId = $event->match['id'];
+        $gameId = $event->match->getGameId();
 
-        $winnerId = $event->match['winner_id'];
+        $winnerId = $event->match->getWinnerId();
 
-        $rewardPoints = LotteryGame::query()->find($matchId)['reward_points'];
+        $rewardPoints = LotteryGame::query()->find($gameId)['reward_points'];
 
         $user = User::query()->find($winnerId);
 

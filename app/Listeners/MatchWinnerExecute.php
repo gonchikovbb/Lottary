@@ -3,27 +3,23 @@
 namespace App\Listeners;
 
 use App\Events\MatchWinnerEvent;
-use App\Models\LotteryGameMatch;
 use App\Models\LotteryGameMatchUser;
 
 class MatchWinnerExecute
 {
     public function handle(MatchWinnerEvent $event)
     {
-        $matchId = $event->match['id'];
+        $matchId = $event->match->getMatchId();
 
-        $usersRecord[]= LotteryGameMatchUser::query()->where('lottery_game_match_id', '=', $matchId)->get();
+        $usersRecord = LotteryGameMatchUser::query()->where('lottery_game_match_id', '=', $matchId)->get();
 
-        foreach ($usersRecord[0] as $record) {
-            $users[] = $record['user_id'];
+        foreach ($usersRecord as $record) {
+            $userIds[] = $record->getUserId();
         }
-        $winnerIdKey = array_rand($users,1);
+        $winnerIdKey = array_rand($userIds,1);
 
-        $winnerId = $users[$winnerIdKey];
+        $winnerId = $userIds[$winnerIdKey];
 
-        $match = LotteryGameMatch::query()->find($matchId);
-
-        $match->update(['winner_id' => $winnerId]);
-
+        $event->match['winner_id'] = $winnerId;
     }
 }

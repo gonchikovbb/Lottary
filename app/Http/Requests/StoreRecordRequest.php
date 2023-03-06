@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreRecordRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class StoreRecordRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,23 @@ class StoreRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'lottery_game_match_id' => 'required|int',
+        ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $validator->errors()
+        ]));
+    }
+
+    public function messages()
+    {
+        return [
+            'lottery_game_match_id.required' => 'LotteryGameMatchId is required'
         ];
     }
 }

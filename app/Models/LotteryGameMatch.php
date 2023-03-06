@@ -20,7 +20,22 @@ class LotteryGameMatch extends Model
     ];
 
     protected $dispatchesEvents = [
-          'updating' => MatchWinnerEvent::class,
+          'пше ' => MatchWinnerEvent::class,
           'updated' => AddingPointsEvent::class,
     ];
+
+    public function getMatchId()
+    {
+        return $this->id;
+    }
+
+    public function getWinnerId()
+    {
+        return $this->winner_id;
+    }
+
+    public function getGameId()
+    {
+        return $this->game_id;
+    }
 }
