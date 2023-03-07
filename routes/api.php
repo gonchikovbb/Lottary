@@ -32,10 +32,10 @@ Route::middleware('guest')->post('/users/register', [UserController::class, 'sto
 //Авторизация. Получение jwt-токена авторизации
 Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api', 'prefix' => 'auth'], function ($router) {
 //    Route::post('login', ['AuthController@login']);
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
 });
 
 # Авторизованный пользователь, владелец учетной записи
