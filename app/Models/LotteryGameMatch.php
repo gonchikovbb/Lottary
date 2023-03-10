@@ -20,7 +20,7 @@ class LotteryGameMatch extends Model
     ];
 
     protected $dispatchesEvents = [
-          'пше ' => MatchWinnerEvent::class,
+          'updating' => MatchWinnerEvent::class,
           'updated' => AddingPointsEvent::class,
     ];
 
